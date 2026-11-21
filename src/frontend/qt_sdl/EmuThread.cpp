@@ -249,8 +249,8 @@ void EmuThread::run()
 
                 // netplay: the software renderer on every console of every PC (the game can read
                 // rendered 3D back)
-                if (NetplayController::Current() && NetplayController::Current()->Running())
-                    videoRenderer = 0;
+                //if (NetplayController::Current() && NetplayController::Current()->Running())
+                //  videoRenderer = 0;
 
                 updateRenderer();
 
