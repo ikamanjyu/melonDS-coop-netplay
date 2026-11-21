@@ -306,22 +306,33 @@ void EmuThread::run()
             }
 
 
+
             // emulate
             u32 nlines;
-            if (inNetplay)
+
+            // Netplay中も必要なシェーダーをコンパイル
+            if (emuInstance->nds->GPU.GetRenderer3D().NeedsShaderCompile())
             {
-                // one lockstep frame of every player's console, once every input for it is in
+                compileShaders();
+
+                if (inNetplay)
+                {
+                    handleMessages();
+                    continue;
+                }
+
+                nlines = 1;
+            }
+            else if (inNetplay)
+            {
+                // one lockstep frame of every player's console
                 if (!netplay->Step())
                 {
                     handleMessages();
                     continue;
                 }
+
                 nlines = 263;
-            }
-            else if (emuInstance->nds->GPU.GetRenderer3D().NeedsShaderCompile())
-            {
-                compileShaders();
-                nlines = 1;
             }
             else
             {
